@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Криптография</title>
+	<link rel="stylesheet" href="styles.css">
+    </head>
+    <body class="mainbody">
+        <header class="header">
+            <div class="header__div__buttons">
+                <a class="header__button" href="#lr1">Лабораторная 1</a>
+                <a class="header__button" href="#lr2">Лабораторная 2</a>
+                <a class="header__button" href="#">Лабораторная 3</a>
+                <a class="header__button" href="#">Лабораторная 4</a>
+                <a class="header__button" href="#">Лабораторная 5</a>
+            </div>
+        </header>
+        <section class="section" id="lr1">
+            <div>
+                <p class="title__lr">Лабораторная работа 1</p>
+            </div>
+            <div class="lr1__div">
+                <input id="lr1_input" type="text" class="lr1__input" placeholder="Введите текст">
+                <input id="lr1_input__alphabet" type="text" class="lr1__input invisible" placeholder="Введите символы алфавита">
+
+
+                 <div class="lr1__change__lang">
+                    <div class="lr1__lang">
+                        <input onclick="clickRadioBtn()" type="radio" name="alphabet" id="eng" checked>
+                        <label for="eng">ENG</label>
+                     </div>
+    
+                     <div class="lr1__lang">
+                        <input onclick="clickRadioBtn()" type="radio" name="alphabet" id="rus">
+                        <label for="rus">РУС</label>
+                     </div>
+    
+                     <div class="lr1__lang">
+                        <input onclick="clickRadioBtn()" type="radio" name="alphabet" id="rand">
+                        <label for="rand">Произвольный</label>
+                     </div>
+                 </div>
+
+                <button onclick="btnClick()" class="lr1__button" id="btnLR1">Рассчитать</button>
+                <p class="lr1__output__string" id="lr1_weight">Информационный вес:</p>
+                <p class="lr1__output__string" id="lr1_power">Мощность:</p>
+            </div>
+        </section>
+
+        <section class="section" id="lr2">
+
+            <div>
+                <p class="title__lr">Лабораторная работа 2</p>
+            </div>
+            <div class="lr1__div">
+                <div class="horizontal_div">
+                    <canvas class="lr2__image" id="canvas"></canvas>
+                    <div class="vertical_div">
+                        <p class="lr1__output__string" id="size_before">Размер файла до: 0</p>
+                        <p class="lr1__output__string" id="size_after">Размер файла после: 0</p>
+                    </div>
+                </div>
+                <input class="input__file" type="file" id="files" name="files[]"/>
+                <div class="button_with_text">
+                    <label for="files" class="button" >Загрузить</label>
+                    <p class="lr1__output__string"> - Выбрать и загрузить файл для работы с ним</p>
+                </div>
+                <div class="button_with_text">
+                    <span onclick="CreateIcon()" class="button" id="create_icon">Создать</span>
+                    <p class="lr1__output__string"> - Создать и загрузить рандомную иконку</p>
+                </div>
+                <div class="button_with_text">
+                    <span onclick="ShowIcon()"   class="button" id="show_icon"  >Показать</span>
+                    <p class="lr1__output__string"> - Показать из загруженого файла иконку</p>
+                </div>
+                <div class="button_with_text">
+                    <span onclick="Compress()"   class="button" id="compress"   >Сжать</span>
+                    <p class="lr1__output__string"> - Сжать загруженный файл методом RLE</p>
+                </div>
+                <div class="button_with_text">
+                    <span onclick="Unclench()"   class="button" id="unclench"   >Разжать</span>
+                    <p class="lr1__output__string"> - Разжать загруженный файл</p>
+                </div>
+            </div>
+
+        </section>
+
+    </body>
+    <script src="code.js"></script>
+</html>
