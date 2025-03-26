@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="eng">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,7 +22,9 @@
                 <p class="title__lr">Лабораторная работа 1</p>
             </div>
             <div class="lr1__div">
+                <label for="lr1_input"></label>
                 <input id="lr1_input" type="text" class="lr1__input" placeholder="Введите текст">
+                <label for="lr1_input__alphabet"></label>
                 <input id="lr1_input__alphabet" type="text" class="lr1__input invisible" placeholder="Введите символы алфавита">
 
 
@@ -80,7 +82,7 @@
                     <p class="lr1__output__string"> - Сжать загруженный файл методом RLE</p>
                 </div>
                 <div class="button_with_text">
-                    <span onclick="Unclench()"   class="button" id="unclench"   >Разжать</span>
+                    <span onclick="Decompress()" class="button" id="unclench"   >Разжать</span>
                     <p class="lr1__output__string"> - Разжать загруженный файл</p>
                 </div>
             </div>

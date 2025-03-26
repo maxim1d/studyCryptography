@@ -9,15 +9,15 @@ function clickRadioBtn() {
         document.getElementById('lr1_input__alphabet').classList.add('invisible');
         document.getElementById('lr1_input__alphabet').classList.remove('visible');
     }
-};
+}
 
 
 
 
 function btnClick() {   
-    var text = document.getElementById('lr1_input').value;
-    var alphabet; // регулярное выражение
-    var N = 0; // мощность алфавита
+    let text = document.getElementById('lr1_input').value;
+    let alphabet; // регулярное выражение
+    let N; // мощность алфавита
     if (document.getElementById('eng').checked) {
         console.log("eng language");
         N = 27;
@@ -29,26 +29,26 @@ function btnClick() {
         alphabet = /[а-я ]/gi;
     } else {
         console.log("rand language");
-        var alphabet_from_string = document.getElementById('lr1_input__alphabet').value;
+        let alphabet_from_string = document.getElementById('lr1_input__alphabet').value;
         N = alphabet_from_string.length;
         alphabet = new RegExp("[" + alphabet_from_string + "]", "gi");
         console.log(alphabet);
     }
     console.log(Math.ceil(Math.log2(N)));
 
-    var K;
+    let K;
     try {
         K = text.match(alphabet).length; // кол-во символов в сообщении
     } catch {
         K = 0;
     }
-    var i  = Math.ceil(Math.log2(N)); // информационный вес одного символа
-    var I = K * i; // информационный вес сообщения
+    let i  = Math.ceil(Math.log2(N)); // информационный вес одного символа
+    let I = K * i; // информационный вес сообщения
     
     
     document.getElementById('lr1_weight').innerHTML="Информационный вес: " + I.toString();
     document.getElementById('lr1_power').innerHTML="Мощность: " + N.toString();
-};
+}
 
 // --- LR 2 ---
 
@@ -58,14 +58,10 @@ const NUMBER_PIXELS = WIDTH_IMAGE * HEIGHT_IMAGE;
 const BLACK = 1;
 const WHITE = 0;
 
-var flag = false;
-var file_array = [];
-var current_file_string;
-
 const inputFile = document.getElementById("files");
 
 inputFile.addEventListener('change', (e) => {  
-    var file = e.target.files[0];
+    let file = e.target.files[0];
     document.getElementById("size_before").innerHTML = "Размер файла до: " + file.size + " B";
     document.getElementById("size_after").innerHTML = "Размер файла после: 0";
 });
@@ -78,42 +74,32 @@ function CreateIcon() {
     DownloadFile("new_icon.txt", randomColorIcon);
 }
 
-function ShowIcon() {
+async function ShowIcon() {
     let selectedFile = document.getElementById("files").files[0];
-    
-    let reader = new FileReader();
-    reader.onload = function() {
-        var icon_text = reader.result;
-        current_file_string = icon_text;
-        const canvas = document.getElementById("canvas");
-        canvas.width = WIDTH_IMAGE;
-        canvas.height = WIDTH_IMAGE;
-        const context = canvas.getContext("2d");
+    let stringFromFile = await ReadFile(selectedFile, "text");
 
-        const img = new Image(WIDTH_IMAGE, HEIGHT_IMAGE);
-        context.drawImage(img, 0, 0);
-        const imageData = context.getImageData(0,0, img.width, img.height);
+    const canvas = document.getElementById("canvas");
+    canvas.width = WIDTH_IMAGE;
+    canvas.height = WIDTH_IMAGE;
+    const context = canvas.getContext("2d");
+    const image = new Image(WIDTH_IMAGE, HEIGHT_IMAGE);
+    context.drawImage(image, 0, 0);
 
-        let counter = 0;
-        while (counter < imageData.data.length) {
-            if (icon_text[Math.floor(counter / 4)].toString() == BLACK.toString()) {
-                imageData.data[counter] = 0;    
-                imageData.data[counter + 1] = 0;
-                imageData.data[counter + 2] = 0;
-                imageData.data[counter + 3] = 255;
-            } else {
-                imageData.data[counter] = 255;
-                imageData.data[counter + 1] = 255;
-                imageData.data[counter + 2] = 255;
-                imageData.data[counter + 3] = 255;
-            }
-            counter += 4;
-            
+    const imageData = context.getImageData(0,0, image.width, image.height);
+    for (let counter = 0; counter < imageData.data.length; counter+=4) {
+        if (stringFromFile[Math.floor(counter / 4)].toString() === BLACK.toString()) {
+            imageData.data[counter] = 0;
+            imageData.data[counter + 1] = 0;
+            imageData.data[counter + 2] = 0;
+            imageData.data[counter + 3] = 255;
+        } else {
+            imageData.data[counter] = 255;
+            imageData.data[counter + 1] = 255;
+            imageData.data[counter + 2] = 255;
+            imageData.data[counter + 3] = 255;
         }
-        context.putImageData(imageData, 0, 0);
     }
-    reader.readAsText(selectedFile);
-    
+    context.putImageData(imageData, 0, 0);
 }
 
 function AddZero(string, count) {
@@ -123,97 +109,99 @@ function AddZero(string, count) {
     return string;
 }
 
-function Compress() {
-
-    var icon_text = current_file_string;
+async function Compress() {
+    let selectedFile = document.getElementById("files").files[0];
+    let stringFromFile = await ReadFile(selectedFile, "text");
     let index = 1;
-    let number_of_repetitions = 0;
-    var array_compress = [];
-    while (index <= icon_text.length) {
-        if (icon_text[index - 1] == icon_text[index] & number_of_repetitions < 127) {
-            number_of_repetitions++;
+    let numberRepetitions = 0;
+    let arrayCompressBinary = [];
+    while (index <= stringFromFile.length) {
+        if (stringFromFile[index - 1] === stringFromFile[index] && numberRepetitions < 127) {
+            numberRepetitions++;
         } else {
             // старший бит - цвет "1" - черный, "0" - белый
             // далее 7 бит кол-ва повторений
             // Примеры:
-            // 1 0000111 - повторения цвета "1" 7 раз
-            // 0 0000001 - цвет "0" единичный
-            // 0 111111 - повторений цвета "0" 127 раз
-            array_compress.push(
-                icon_text[index - 1] + AddZero((number_of_repetitions + 1).toString(2), 7)
+            // "1111111" => повторение цвета "1" (Черный) 7 раз => 1(Черный) 0000111 (7 в двоичной с/с) => 10000111
+            // "0" => повторение цвета "0" (Белый) 1 раз => 0(Белый) 0000001 (1 в двоичной с/с) => 00000001
+            arrayCompressBinary.push(
+                stringFromFile[index - 1] + AddZero((numberRepetitions + 1).toString(2), 7)
             );
-            number_of_repetitions = 0;
+            numberRepetitions = 0;
         }
         index++;
     }
-    array_compress_digit = [];
 
-    for (let i = 0; i < array_compress.length; i++) {
-        array_compress_digit[i] = parseInt(array_compress[i], 2);
+    let arrayCompressDecimal = [];
+    for (let index = 0; index < arrayCompressBinary.length; index++) {
+        arrayCompressDecimal[index] = parseInt(arrayCompressBinary[index], 2);
     }
 
     // преобразование массива в байт-массив и потом в файл
-    let uint8array = new Uint8Array(array_compress_digit.length);
-    for (let i = 0; i < array_compress_digit.length; i++) {
-        uint8array[i] = array_compress_digit[i];
-        console.log(uint8array[i]);
+    let uint8array = new Uint8Array(arrayCompressDecimal.length);
+    for (let index = 0; index < arrayCompressDecimal.length; index++) {
+        uint8array[index] = arrayCompressDecimal[index];
     }
+
     document.getElementById("size_after").innerHTML = "Размер файла после: " + uint8array.length + " B";
-    // скачивание
+
     DownloadFile("2.txt", uint8array);
 }
 
-function MultiplicationRows(string, count) {
-    var out_string = "";
-    for (let i = 0; i < count; i++) {
-        out_string += string;
-    }
-    return out_string;
+function ReadFile(file, type) {
+    return new Promise(function(resolve) {
+        let stringsFromFile;
+        let reader = new FileReader();
+        reader.onload = function() {
+            stringsFromFile = reader.result;
+            resolve(stringsFromFile);
+        }
+        switch(type) {
+            case "buffer":
+                reader.readAsArrayBuffer(file);
+                break;
+            case "text":
+                reader.readAsText(file);
+                break;
+            default:
+                reader.readAsText(file);
+                break;
+        }
+    });
 }
 
-function Unclench() {
-    let selectedFile = document.getElementById("files").files[0];
-    let reader = new FileReader(); 
-    reader.readAsArrayBuffer(selectedFile);
-    reader.onload = function() {
-        var buf = reader.result;
-        var uint8array = new Uint8Array(buf);
-        
-        console.log(uint8array);
-        var array = [];
-
-        for (var i = 0; i < uint8array.byteLength; i++) {
-            array[i] = uint8array[i];
-        }
-
-        console.log(array);
-
-        var binary_string = new TextDecoder().decode(uint8array);
-        console.log(binary_string);
-
-        var binary_array = [];
-        for (let i = 0; i < uint8array.length; i++) {
-            binary_array.push(AddZero(uint8array[i].toString(2), 8));
-        }
-
-        var string_for_file = "";
-        for (let i = 0; i < binary_array.length; i++) {
-            string_for_file += MultiplicationRows(
-                binary_array[i][0].toString(),
-                 parseInt(binary_array[i].slice(1), 2)
-                );
-            
-            // console.log(binary_array[i][0].toString(), parseInt(binary_array[i].slice(1), 2));
-            // console.log(string_for_file);
-        }
-        document.getElementById("size_after").innerHTML = "Размер файла после: " + string_for_file.length + " B";
-        DownloadFile("3.txt", string_for_file);
+function MultiplicationRows(string, count) {
+    let outString = "";
+    for (let index = 0; index < count; index++) {
+        outString += string;
     }
+    return outString;
+}
+
+async function Decompress() {
+    let selectedFile = document.getElementById("files").files[0];
+    let bufferFromFile = await ReadFile(selectedFile, "buffer");
+    let uint8array = new Uint8Array(bufferFromFile);
+
+    let binaryArray = [];
+    for (let i = 0; i < uint8array.length; i++) {
+        binaryArray.push(AddZero(uint8array[i].toString(2), 8));
+    }
+
+    let stringForFile = "";
+    for (let index = 0; index < binaryArray.length; index++) {
+        stringForFile += MultiplicationRows(
+            binaryArray[index][0].toString(),
+            parseInt(binaryArray[index].slice(1), 2)
+        );
+    }
+    document.getElementById("size_after").innerHTML = "Размер файла после: " + stringForFile.length + " B";
+    DownloadFile("3.txt", stringForFile);
 }
 
 function DownloadFile(nameFile, content) {
-    var blob = new Blob([content], {type: 'text/plain'});
-    var link = document.createElement('a');
+    let blob = new Blob([content], {type: 'text/plain'});
+    let link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = nameFile;
     link.click();
