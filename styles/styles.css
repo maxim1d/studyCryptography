@@ -1,0 +1,212 @@
+*,
+*::after,
+*::before{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+:root {
+    --color-bg: rgb(255, 255, 255);
+    --color-text: rgb(0, 0, 0);
+    --color-primary: rgb(255, 255, 255);
+    --color-secondary: rgb(0, 0, 0);
+    --color-gray: rgb(181, 181, 181);
+}
+.dark-mode {
+    --color-bg: rgb(0, 0, 0);
+    --color-text: rgb(255, 255, 255);
+    --color-primary: rgb(0, 0, 0);
+    --color-secondary: rgb(255, 255, 255);
+    --color-gray: rgb(46, 46, 46);
+}
+
+body { background-color: var(--color-bg); }
+a{ text-decoration: none; color: inherit; }
+
+@font-face {
+    font-family: 'NotoSansMedium';
+    font-style: normal;
+    font-weight: normal;
+    src: url('../fonts/Noto_Sans_Display/NotoSansDisplay_Condensed-Medium.ttf');
+}
+@font-face {
+    font-family: 'NotoSansLight';
+    font-style: normal;
+    font-weight: normal;
+    src: url("../fonts/Noto_Sans_Display/NotoSansDisplay_Condensed-Light.ttf");
+}
+
+.f-s-default {
+    color: var(--color-text);
+    font-family: 'NotoSansLight', serif;
+    font-size: 2.5vmin;
+}
+.f-s-title {
+    color: var(--color-text);
+    font-family: 'NotoSansBoldItalic', serif;
+    font-size: 3vmin;
+}
+
+.w-100 { width: 100%; }
+
+.tr-all { transition: all 0.3s; }
+
+
+input[type='text'] {
+    background-color: var(--color-primary);
+    color: var(--color-text);
+    padding: 1%;
+    border: none;
+    border-bottom: 2px solid var(--color-gray);
+    outline: none;
+}
+input[type='radio'] { accent-color: var(--color-secondary); }
+
+input[type='file'] {
+    width: 0;
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+}
+
+/*#lr-1 { margin-top: 10%; }*/
+.header {
+    /*position: fixed;*/
+    /*top: 0;*/
+    /*z-index: 2;*/
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: var(--color-bg);
+}
+
+
+.header-menu {
+    display: flex;
+    justify-content: space-between;
+    padding: 1%;
+    width: 70%;
+    border-bottom: 2px solid var(--color-gray);
+}
+.text-button {
+    padding: 1%;
+    margin: 1%;
+    border-bottom: 2px solid var(--color-primary);
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.text-button:hover { border-bottom: 2px solid var(--color-secondary); }
+
+#dark-mode {
+    background: none;
+    position: fixed;
+    top: 85%;
+    left: 90%;
+}
+
+.section {
+    margin-top: 5%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1%;
+    padding: 1%;
+    width: 70%;
+    max-width: 700px;
+    transition: all 0.3s;
+}
+.container:hover {
+    box-shadow: 0 0 15px 0 var(--color-gray);
+}
+
+.radio-button-group {
+    width: 70%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.radio-button {
+    margin: 1%;
+    padding: 1%;
+    display: flex;
+    align-items: center;
+}
+
+.invisible{
+    opacity: 0;
+    position: absolute;
+    top: -999px;
+}
+
+.text-output-group {
+    padding: 1%;
+    margin: 1%;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.img-button {
+    background-color: var(--color-bg);
+    fill: var(--color-secondary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 5vw; max-width: 80px; min-width: 20px;
+    height: 5vw; max-height: 80px; min-height: 20px;
+    padding: 0.5vw;
+    margin: 1vw;
+    border: 2px solid var(--color-gray);
+    transition: all 0.3s;
+    cursor: pointer;
+}
+.img-button:hover{
+    border: 2px solid var(--color-secondary);
+}
+
+.img-button-input {
+    background-color: var(--color-bg);
+    fill: var(--color-secondary);
+    width: 100%;
+    height: 100%;
+}
+
+.horizontal-div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.vertical-div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.icon-canvas {
+    margin: 1%;
+    width: 100px;
+    height: 100px;
+    background-color: var(--color-gray);
+}
+
+.footer {
+    padding: 1%;
+    background-color: var(--color-bg);
+    height: 150px;
+    justify-content: center;
+}
