@@ -18,6 +18,7 @@ class CharacterInterval {
 }
 
 export class ArithmeticMethod {
+    static DIFFERENCE = 6;
     static getCode(string, dictionaryOfProbabilities) {
         let currentInterval = new CharacterInterval(string, 0, 1);
         let currentDictionary = ArithmeticMethod.getNewBorders(currentInterval, dictionaryOfProbabilities);
@@ -81,11 +82,10 @@ export class ArithmeticMethod {
     static compress(string, dictionaryOfProbabilities) {
         let arrayCodes = []
         let currentPosition = 0;
-        let difference = 9;
         while (currentPosition < string.length) {
-            let currentString = string.substring(currentPosition, currentPosition + difference);
+            let currentString = string.substring(currentPosition, currentPosition + this.DIFFERENCE);
             arrayCodes.push(ArithmeticMethod.getCode(currentString, dictionaryOfProbabilities));
-            currentPosition += difference;
+            currentPosition += this.DIFFERENCE;
         }
         let float64array = ArithmeticMethod.saveFloatsToBinary(arrayCodes);
         let weight = RleMethod.downloadFile("compressed_Arithmetic", float64array);
@@ -107,24 +107,3 @@ export class ArithmeticMethod {
         return Array.from(float64Array);
     }
 }
-
-// let string = "Слова в хаотичном порядке должны располагаться в порядке строго относящемуся к хаотичному";
-// // console.log(string.length);
-// let dictionary = HuffmanMethod.toDictionaryFromString(string);
-// let result = ArithmeticMethod.compress(string, dictionary);
-// console.log(result);
-//
-// let decompressString = ArithmeticMethod.decompress(result, dictionary);
-// console.log(`${decompressString}`);
-//
-// console.log(`Изначальная строка: ${string.length} B`);
-// console.log(`Массив чисел: ${result.length * 8} B`);
-// console.log(`Разжатая строка из чисел: ${decompressString.length} B`);
-
-//
-//
-// let saved = ArithmeticMethod.saveFloatsToBinary(result)
-// console.log(saved)
-//
-// let read = ArithmeticMethod.readFloatsFromBinary(saved)
-// console.log(read);

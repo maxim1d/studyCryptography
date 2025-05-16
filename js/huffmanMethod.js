@@ -105,7 +105,7 @@ export class HuffmanMethod {
         }
         let weight = RleMethod.downloadFile("compressed_file_Huffman.txt", uint8array);
         let jsonString = JSON.stringify(HuffmanMethod.toDictionaryFromString(string));
-        weight += RleMethod.downloadFile("dictionary.json", jsonString, TypeWrite.JSON);
+        weight += RleMethod.downloadFile("dictionary_Huffman.json", jsonString, TypeWrite.JSON);
         return weight;
     }
 
@@ -131,7 +131,7 @@ export class HuffmanMethod {
                 currentNode = node;
             }
         }
-        return RleMethod.downloadFile("decompressed.txt", decompressString);
+        return RleMethod.downloadFile("decompressed_Huffman.txt", decompressString);
     }
 }
 

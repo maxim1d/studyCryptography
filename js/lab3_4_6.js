@@ -1,6 +1,7 @@
 import {TypeRead, RleMethod} from "./rleMethod.js";
 import {HuffmanMethod} from "./huffmanMethod.js";
 import {ArithmeticMethod} from "./arithmeticMethod.js";
+import {LzwMethod} from "./lzwMethod.js";
 
 let currentFile = null;
 let currentJsonFile = null;
@@ -9,12 +10,13 @@ const sizeAfter = document.getElementById("size-after-huff");
 
 const radioHuffman = document.querySelector('[name="method"][id="huffman"]')
 const radioArithmetic = document.querySelector('[name="method"][id="arithmetic"]')
+const radioLzw = document.querySelector('[name="method"][id="lzw"]')
 
 document.getElementById("input-file-huff").addEventListener(
     "change",
     async (e) => {
         currentFile = e.target.files[0];
-        console.log(await RleMethod.readFile(currentFile, TypeRead.Text));
+        // console.log(await RleMethod.readFile(currentFile, TypeRead.Text));
 });
 
 document.getElementById("input-json-huff").addEventListener(
@@ -29,6 +31,8 @@ document.getElementById("compress-huffman").addEventListener("click", async () =
             await compressHuffman();
         } else if (radioArithmetic.checked) {
             await compressArithmetic();
+        } else if (radioLzw.checked) {
+            await compressLZW();
         }
     } else {
         console.error("File not found.");
@@ -42,6 +46,8 @@ document.getElementById("decompress-huffman").addEventListener('click', async ()
                 await decompressHuffman();
             } else if (radioArithmetic.checked) {
                 await decompressArithmetic();
+            } else if (radioLzw.checked) {
+                await decompressLZW();
             }
         } else {
             console.error("File JSON-formated not found.");
@@ -50,6 +56,14 @@ document.getElementById("decompress-huffman").addEventListener('click', async ()
         console.error("File txt-formated not found.");
     }
 });
+
+async function compressLZW() {
+    let stringFromFile = await RleMethod.readFile(currentFile, TypeRead.Text);
+    let dictionary = LzwMethod.toDictionaryFromString(stringFromFile);
+    let weight = LzwMethod.compress(stringFromFile, dictionary);
+    sizeBefore.innerText = "Размер файла(ов) до: " + currentFile.size + "B";
+    sizeAfter.innerHTML = "Размер файла(ов) после: " + weight + "B";
+}
 
 async function compressArithmetic() {
     let stringFromFile = await RleMethod.readFile(currentFile, TypeRead.Text);
@@ -84,6 +98,15 @@ async function decompressHuffman() {
     let jsonFromFile = await RleMethod.readFile(currentJsonFile, TypeRead.Text);
     let dict = JSON.parse(jsonFromFile);
     let weight = HuffmanMethod.decompress(uint8array, dict);
+    sizeBefore.innerText = "Размер файла(ов) до: " + (currentFile.size + currentJsonFile.size) + "B";
+    sizeAfter.innerHTML = "Размер файла(ов) после: " + weight + "B";
+}
+async function decompressLZW() {
+    let bufferFromFile = await RleMethod.readFile(currentFile, TypeRead.Buffer);
+    let uint8array = new Uint8Array(bufferFromFile);
+    let jsonFromFile = await RleMethod.readFile(currentJsonFile, TypeRead.Text);
+    let dict = JSON.parse(jsonFromFile);
+    let weight = LzwMethod.decompress(uint8array, dict);
     sizeBefore.innerText = "Размер файла(ов) до: " + (currentFile.size + currentJsonFile.size) + "B";
     sizeAfter.innerHTML = "Размер файла(ов) после: " + weight + "B";
 }
