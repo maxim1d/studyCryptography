@@ -27,24 +27,30 @@ a{ text-decoration: none; color: inherit; }
     font-family: 'NotoSansMedium';
     font-style: normal;
     font-weight: normal;
-    src: url('../fonts/Noto_Sans_Display/NotoSansDisplay_Condensed-Medium.ttf');
+    src: url('/fonts/NotoSansDisplay_Condensed-Medium.ttf');
 }
 @font-face {
     font-family: 'NotoSansLight';
     font-style: normal;
     font-weight: normal;
-    src: url("../fonts/Noto_Sans_Display/NotoSansDisplay_Condensed-Light.ttf");
+    src: url("/fonts/NotoSansDisplay_Condensed-Light.ttf");
+}
+@font-face {
+    font-family: 'NotoSansBoldItalic';
+    font-style: normal;
+    font-weight: normal;
+    src: url("/fonts/NotoSansDisplay_Condensed-Light.ttf");
 }
 
 .f-s-default {
     color: var(--color-text);
     font-family: 'NotoSansLight', serif;
-    font-size: 2.5vmin;
+    font-size: clamp(14px, 2vw, 20px);
 }
 .f-s-title {
     color: var(--color-text);
     font-family: 'NotoSansBoldItalic', serif;
-    font-size: 3vmin;
+    font-size: clamp(20px, 2vw, 30px);
 }
 
 .w-100 { width: 100%; }
@@ -174,8 +180,8 @@ textarea {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 5vw; max-width: 80px; min-width: 20px;
-    height: 5vw; max-height: 80px; min-height: 20px;
+    width: 5vw; max-width: 80px; min-width: 40px;
+    height: 5vw; max-height: 80px; min-height: 40px;
     padding: 0.5vw;
     margin: 1vw;
     border: 2px solid var(--color-gray);
